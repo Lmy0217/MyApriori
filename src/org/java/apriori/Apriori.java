@@ -370,7 +370,8 @@ public class Apriori {
 				sb.append(", ");
 			}
 		}
-		sb.delete(sb.length() - 2, sb.length());
+		if(sb.length() >= 2)
+			sb.delete(sb.length() - 2, sb.length());
 		sb.append("\n\n");
 
 		return sb.toString();
@@ -397,7 +398,7 @@ public class Apriori {
 						+ m_TxtReader.getAttributes().elementAt(i).getName()
 						+ ", ");
 		}
-		if (sb.length() > 2)
+		if (sb.length() >= 2)
 			sb.delete(sb.length() - 2, sb.length());
 		sb.append("\n\n");
 
