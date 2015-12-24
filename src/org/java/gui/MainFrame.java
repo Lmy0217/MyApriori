@@ -242,10 +242,11 @@ public class MainFrame extends JFrame {
 
 					createTable(m_TableData, m_ColumnNames);
 
+					m_AssociationRules.setEnabled(false);
+					
 					m_Pretreatment.setEnabled(true);
 					m_MiningOptions.setEnabled(true);
 					m_LargeItemSets.setEnabled(true);
-					m_AssociationRules.setEnabled(false);
 					m_AssociationAnalysis.setEnabled(true);
 
 					printInformation(m_Apriori.information());
@@ -262,6 +263,9 @@ public class MainFrame extends JFrame {
 					m_TableData = m_Apriori.pretreatInstancesToObjectArray();
 					m_ColumnNames = m_Apriori.chooseAttributesToStringArray();
 					createTable(m_TableData, m_ColumnNames);
+					
+					m_AssociationRules.setEnabled(false);
+					
 					printInformation(m_Apriori.pretreatToString());
 				}
 			}
@@ -277,7 +281,9 @@ public class MainFrame extends JFrame {
 		m_LargeItemSets.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				m_Apriori.findLargeItemSets();
+				
 				m_AssociationRules.setEnabled(true);
+				
 				printInformation(m_Apriori.lsToString());
 			}
 		});

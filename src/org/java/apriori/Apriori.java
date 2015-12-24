@@ -65,11 +65,12 @@ public class Apriori {
 	}
 
 	/**
-	 * Sets the mining options. The options contain the minimum support and the minimum
-	 * confidence.
+	 * Sets the mining options. The options contain the minimum support and the
+	 * minimum confidence.
 	 * 
 	 * @param options
-	 *            the mining options contain the minimum support and the minimum confidence
+	 *            the mining options contain the minimum support and the minimum
+	 *            confidence
 	 */
 	public void setOptions(double[] options) {
 
@@ -138,10 +139,11 @@ public class Apriori {
 	 */
 	public void findAssociationsRules() {
 
+		m_sortedRuleSet.removeAllElements();
+
 		if (m_Ls.size() < 2)
 			return;
 
-		m_sortedRuleSet.removeAllElements();
 		for (int i = 1; i < m_Ls.size(); i++) {
 			Vector<LargeItem> largeItemSet = m_Ls.elementAt(i)
 					.getLargeItemSet();
@@ -160,24 +162,30 @@ public class Apriori {
 
 							double ruleConfidence = (double) largeItem
 									.getWeight() / kLargeItem.getWeight();
+							
 							if (ruleConfidence >= m_minConfidence) {
 
 								if (numRules() == 0)
-									m_sortedRuleSet.add(0, new Object[] {
+									m_sortedRuleSet.add(new Object[] {
 											kLargeItem, splitLargeItem,
 											ruleConfidence });
 								else {
-									for (int m = 0; m < numRules(); m++) {
+									int m = 0;
+									for (; m < numRules(); m++) {
 										if (((Double) (((Object[]) m_sortedRuleSet
 												.elementAt(m))[2]))
 												.doubleValue() <= ruleConfidence) {
 											m_sortedRuleSet.add(m,
 													new Object[] { kLargeItem,
-													splitLargeItem,
-													ruleConfidence });
+															splitLargeItem,
+															ruleConfidence });
 											break;
 										}
 									}
+									if (m == numRules())
+										m_sortedRuleSet.add(new Object[] {
+												kLargeItem, splitLargeItem,
+												ruleConfidence });
 								}
 							}
 						}
@@ -264,7 +272,7 @@ public class Apriori {
 		for (int i = 0, j = 0; i < m_TxtReader.numAttributes(); i++) {
 			if (m_ChooseAttributes[i])
 				stringArray[j++] = m_TxtReader.getAttributes().elementAt(i)
-				.getName();
+						.getName();
 		}
 
 		return stringArray;
@@ -349,20 +357,21 @@ public class Apriori {
 		StringBuilder sb = new StringBuilder();
 		sb.append("ÊôÐÔ Ô¤´¦Àí£º\n");
 
-		String[] stringArray = chooseAttributesToStringArray();
+		String[] stringArray = attributesToStringArray();
 		for (int i = 0; i < stringArray.length; i++) {
-			sb.append(stringArray[i]);
-			if (m_PretreatOptions != null && !m_PretreatOptions[i].equals(""))
-				sb.append(" " + m_PretreatOptions[i]);
-			else
-				sb.append(" null");
+			if (m_ChooseAttributes[i]) {
+				sb.append(stringArray[i]);
+				if (m_PretreatOptions != null
+						&& !m_PretreatOptions[i].equals(""))
+					sb.append(" " + m_PretreatOptions[i]);
+				else
+					sb.append(" null");
 
-			if (i != stringArray.length - 1)
 				sb.append(", ");
-			else
-				sb.append("\n");
+			}
 		}
-		sb.append("\n");
+		sb.delete(sb.length() - 2, sb.length());
+		sb.append("\n\n");
 
 		return sb.toString();
 	}
@@ -496,7 +505,7 @@ public class Apriori {
 		for (int i = 0; i < largeItem.getValues().length; i++) {
 			sb.append(" "
 					+ m_TxtReader.getAttributes()
-					.elementAt(largeItem.getIndexs()[i]).getName()
+							.elementAt(largeItem.getIndexs()[i]).getName()
 					+ "=" + largeItem.getValues()[i]);
 		}
 		sb.append(" " + largeItem.getWeight());
